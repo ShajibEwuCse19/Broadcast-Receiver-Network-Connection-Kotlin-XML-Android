@@ -27,7 +27,9 @@ class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
                 connectivityManager.registerDefaultNetworkCallback(connectionCallBack())
-            } else -> {
+            }
+
+            else -> {
                 context.registerReceiver(
                     networkReceiver,
                     IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -38,6 +40,7 @@ class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
 
     override fun onInactive() {
         super.onInactive()
+        context.unregisterReceiver(networkReceiver)
         connectivityManager.unregisterNetworkCallback(networkConnectionCallBack)
     }
 
